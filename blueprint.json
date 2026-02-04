@@ -1,0 +1,1368 @@
+{
+    "name": "taylon teste",
+    "flow": [
+        {
+            "id": 3,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 1772927,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -389,
+                    "y": -176
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "webhook-teste-zayon"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "isStatusReply",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "chatLid",
+                        "type": "text"
+                    },
+                    {
+                        "name": "connectedPhone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "waitingMessage",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "isEdit",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "isGroup",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "isNewsletter",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "instanceId",
+                        "type": "text"
+                    },
+                    {
+                        "name": "messageId",
+                        "type": "text"
+                    },
+                    {
+                        "name": "phone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fromMe",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "momment",
+                        "type": "number"
+                    },
+                    {
+                        "name": "status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "chatName",
+                        "type": "text"
+                    },
+                    {
+                        "name": "senderPhoto",
+                        "type": "text"
+                    },
+                    {
+                        "name": "senderName",
+                        "type": "text"
+                    },
+                    {
+                        "name": "photo",
+                        "type": "text"
+                    },
+                    {
+                        "name": "broadcast",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "participantPhone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "participantLid",
+                        "type": "text"
+                    },
+                    {
+                        "name": "referenceMessageId",
+                        "type": "text"
+                    },
+                    {
+                        "name": "messageExpirationSeconds",
+                        "type": "number"
+                    },
+                    {
+                        "name": "forwarded",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "type",
+                        "type": "text"
+                    },
+                    {
+                        "name": "fromApi",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "text",
+                        "spec": [
+                            {
+                                "name": "message",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "_traceContext",
+                        "spec": [
+                            {
+                                "name": "traceId",
+                                "type": "text"
+                            },
+                            {
+                                "name": "spanId",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 12,
+            "module": "datastore:GetRecord",
+            "version": 1,
+            "parameters": {
+                "datastore": 70652
+            },
+            "mapper": {
+                "key": "barber-{{3.phone}}",
+                "returnWrapped": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -43,
+                    "y": -173
+                },
+                "restore": {
+                    "parameters": {
+                        "datastore": {
+                            "label": "banco de dados "
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datastore",
+                        "type": "datastore",
+                        "label": "Data store",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "key",
+                        "type": "text",
+                        "label": "Key",
+                        "required": true
+                    },
+                    {
+                        "name": "returnWrapped",
+                        "type": "boolean",
+                        "label": "Return Wrapped Output",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "historico_conversa",
+                        "label": null,
+                        "help": "",
+                        "type": "text",
+                        "default": null,
+                        "required": false,
+                        "multiline": false
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 4,
+            "module": "gemini-ai:createACompletionGeminiPro",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 7025902
+            },
+            "filter": {
+                "name": "É texto?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{3.text}}",
+                            "o": "exist"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "model": "gemini-2.5-flash",
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": "Nome do Cliente: {{3.senderName}}Mensagem: {{3.text.message}}",
+                                "type": "text"
+                            }
+                        ]
+                    }
+                ],
+                "generationConfig": {
+                    "imageConfig": {},
+                    "thinkingConfig": {},
+                    "responseMimeType": "application/json",
+                    "responseModalities": [
+                        "text"
+                    ]
+                },
+                "system_instruction": {
+                    "parts": [
+                        {
+                            "text": "Você é o assistente virtual da Barbearia do Taylon.\r\nSua função é agendar horários e informar valores, mantendo um tom cordial, direto e profissional.\r\n\r\nContexto atual:\r\n- Hoje é: {{now}} (Data e hora atual para referência de \"amanhã\", \"sexta-feira\", etc).\r\n\r\nHISTÓRICO DE CONVERSA (Memória do que já foi falado): {{12.historico_conversa}}\r\n\r\n\r\nTABELA DE PREÇOS E DURAÇÃO ESTIMADA:\r\n- Corte de cabelo: R$ 40,00 (45 min)\r\n- Corte + Sobrancelha: R$ 45,00 (50 min)\r\n- Barba: R$ 40,00 (30 min)\r\n- Corte + Barba: R$ 80,00 (1h 15min)\r\n- Sobrancelha: R$ 15,00 (15 min)\r\n- Pigmentação: R$ 25,00 (Adicional de 15 min)\r\n- Luzes: R$ 100,00 (2h 00min)\r\n- Corte + Barba + Sobrancelha: R$ 85,00 (1h 30min)\r\n\r\nREGRA DE OURO (IMPORTANTE):\r\nNUNCA responda com texto comum. TODA resposta sua DEVE ser estritamente o JSON.\r\nSe a mensagem não tiver dados suficientes para agendar (ex: apenas \"Oi\", \"Quanto custa?\", \"Bom dia\"), retorne o JSON com \"start_date\" e \"end_date\" vazios (\"\") e \"confirmacao\": \"nao\".\r\nLeve em consideração o HISTÓRICO DE CONVERSA para não perguntar coisas que o cliente já respondeu antes.\r\n\r\nSAÍDA OBRIGATÓRIA (FORMATO JSON):\r\nRetorne APENAS um objeto JSON com a seguinte estrutura:\r\n\r\n{\r\n \"summary\": \"Nome do Cliente - Serviços (R$ [Valor Calculado])\",\r\n  \"description\": \"Serviços: [Lista dos itens]\\nValor Total: R$ [Valor Calculado]\",\r\n  \"start_date\": \"YYYY-MM-DDTHH:mm:ss\",\r\n  \"end_date\": \"YYYY-MM-DDTHH:mm:ss\",\r\n  \"confirmacao\": \"sim\" (use 'sim' APENAS se tiver serviço + data + hora definidos),\r\n  \"mensagem_resposta\": \"Sua resposta para o cliente no WhatsApp.\"\r\n}\r\n\r\nEXEMPLOS DE COMPORTAMENTO:\r\n\r\n1. Usuário diz: \"Oi\" ou \"Quanto tá o corte?\"\r\nJSON RETORNO:\r\n{\r\n  \"summary\": \"Dúvida/Greeting\",\r\n  \"description\": \"Cliente pediu informações\",\r\n  \"start_date\": \"\",\r\n  \"end_date\": \"\",\r\n  \"confirmacao\": \"nao\",\r\n  \"mensagem_resposta\": \"Olá! O corte sai a R$ 40,00. Gostaria de agendar? Me diga o dia e horário.\"\r\n}\r\n\r\n2. Usuário diz: \"Quero cortar amanhã às 14h\"\r\nJSON RETORNO:\r\n{\r\n  \"summary\": \"Cliente - Corte (R$ 40,00)\",\r\n  \"description\": \"Serviços: Corte\\nValor: R$ 40,00\",\r\n  \"start_date\": \"2026-01-20T14:00:00\",\r\n  \"end_date\": \"2026-01-20T14:45:00\",\r\n  \"confirmacao\": \"sim\",\r\n  \"mensagem_resposta\": \"Agendado para amanhã às 14h! Valor: R$ 40,00.\"\r\n}"
+                        }
+                    ]
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 314,
+                    "y": -171
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "label": "Gemini 2.5 Flash"
+                        },
+                        "contents": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "parts": {
+                                        "mode": "chose",
+                                        "items": [
+                                            {
+                                                "type": {
+                                                    "mode": "chose",
+                                                    "label": "Text"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "url_context": {
+                            "mode": "chose"
+                        },
+                        "code_execution": {
+                            "mode": "chose"
+                        },
+                        "safetySettings": {
+                            "mode": "chose"
+                        },
+                        "generationConfig": {
+                            "nested": {
+                                "imageConfig": {
+                                    "nested": {
+                                        "imageSize": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        }
+                                    },
+                                    "collapsed": true
+                                },
+                                "stopSequences": {
+                                    "mode": "chose"
+                                },
+                                "thinkingConfig": {
+                                    "nested": {
+                                        "thinking_level": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "include_thoughts": {
+                                            "mode": "chose"
+                                        }
+                                    }
+                                },
+                                "mediaResolution": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "responseMimeType": {
+                                    "mode": "edit"
+                                },
+                                "new_responseSchema": {
+                                    "mode": "chose"
+                                },
+                                "responseModalities": {
+                                    "mode": "chose",
+                                    "collapsed": true
+                                }
+                            }
+                        },
+                        "system_instruction": {
+                            "nested": {
+                                "parts": {
+                                    "mode": "chose",
+                                    "items": [
+                                        null
+                                    ]
+                                }
+                            }
+                        },
+                        "google_maps_context": {
+                            "mode": "chose"
+                        },
+                        "google_search_context": {
+                            "mode": "chose"
+                        },
+                        "file_search_store_context": {
+                            "mode": "chose"
+                        },
+                        "function_declarations_context": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "gemini-ai-q9zyjp"
+                            },
+                            "label": "gemini api teste taylon"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:gemini-ai-q9zyjp",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "AI Model",
+                        "required": true
+                    },
+                    {
+                        "name": "contents",
+                        "spec": [
+                            {
+                                "name": "role",
+                                "type": "select",
+                                "label": "Role",
+                                "options": [
+                                    {
+                                        "label": "User",
+                                        "value": "user"
+                                    },
+                                    {
+                                        "label": "Model",
+                                        "value": "model"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "parts",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "Message Type",
+                                        "options": [
+                                            {
+                                                "label": "Text",
+                                                "value": "text",
+                                                "nested": [
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": false
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "File",
+                                                "value": "file",
+                                                "nested": [
+                                                    {
+                                                        "name": "file_data",
+                                                        "spec": [
+                                                            {
+                                                                "name": "mime_type",
+                                                                "type": "text",
+                                                                "label": "Mime Type",
+                                                                "required": false
+                                                            },
+                                                            {
+                                                                "help": "You get this from the 'Upload a File' module.",
+                                                                "name": "file_uri",
+                                                                "type": "text",
+                                                                "label": "File URI",
+                                                                "required": false
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "File Data",
+                                                        "required": false
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Function Call",
+                                                "value": "functionCall",
+                                                "nested": [
+                                                    {
+                                                        "name": "functionCall",
+                                                        "spec": [
+                                                            {
+                                                                "help": "The name of the function to call.",
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Name",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 64
+                                                                }
+                                                            },
+                                                            {
+                                                                "help": "The function parameters and values in JSON object format.",
+                                                                "name": "args",
+                                                                "type": "json",
+                                                                "label": "Arguments"
+                                                            },
+                                                            {
+                                                                "help": "The unique ID of the function call.",
+                                                                "name": "id",
+                                                                "type": "text",
+                                                                "label": "Function Call ID"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Function Call"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Function Response",
+                                                "value": "functionResponse",
+                                                "nested": [
+                                                    {
+                                                        "name": "functionResponse",
+                                                        "spec": [
+                                                            {
+                                                                "help": "The name of the function to call.",
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Name",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 64
+                                                                }
+                                                            },
+                                                            {
+                                                                "help": "The function response in JSON object format.",
+                                                                "name": "response",
+                                                                "type": "json",
+                                                                "label": "Response",
+                                                                "required": true
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Function Response"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "thoughtSignature",
+                                        "type": "text",
+                                        "label": "Thought Signature"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Parts"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "system_instruction",
+                        "spec": [
+                            {
+                                "name": "parts",
+                                "spec": {
+                                    "name": "value",
+                                    "spec": [
+                                        {
+                                            "name": "text",
+                                            "type": "text",
+                                            "label": "Value"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Prompt"
+                                },
+                                "type": "array",
+                                "label": "Prompts"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "System Instructions"
+                    },
+                    {
+                        "name": "safetySettings",
+                        "spec": [
+                            {
+                                "name": "category",
+                                "type": "select",
+                                "label": "Category",
+                                "options": [
+                                    {
+                                        "label": "Harassment content",
+                                        "value": "HARM_CATEGORY_HARASSMENT"
+                                    },
+                                    {
+                                        "label": "Hate speech and content",
+                                        "value": "HARM_CATEGORY_HATE_SPEECH"
+                                    },
+                                    {
+                                        "label": "Sexually explicit content.",
+                                        "value": "HARM_CATEGORY_SEXUALLY_EXPLICIT"
+                                    },
+                                    {
+                                        "label": "Dangerous content:",
+                                        "value": "HARM_CATEGORY_DANGEROUS_CONTENT"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "threshold",
+                                "type": "select",
+                                "label": "Threshold",
+                                "options": [
+                                    {
+                                        "label": "Block low and above.",
+                                        "value": "BLOCK_LOW_AND_ABOVE"
+                                    },
+                                    {
+                                        "label": "Block medium and above.",
+                                        "value": "BLOCK_MEDIUM_AND_ABOVE"
+                                    },
+                                    {
+                                        "label": "Block only high.",
+                                        "value": "BLOCK_ONLY_HIGH"
+                                    },
+                                    {
+                                        "label": "Block none.",
+                                        "value": "BLOCK_NONE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Safety Settings"
+                    },
+                    {
+                        "name": "generationConfig",
+                        "spec": [
+                            {
+                                "name": "stopSequences",
+                                "spec": {
+                                    "name": "value",
+                                    "type": "text",
+                                    "label": "Stop Sequence"
+                                },
+                                "type": "array",
+                                "label": "Stop Sequences"
+                            },
+                            {
+                                "name": "responseModalities",
+                                "type": "select",
+                                "label": "Response Modalities",
+                                "multiple": true,
+                                "validate": {
+                                    "enum": [
+                                        "text",
+                                        "image"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "maxOutputTokens",
+                                "type": "number",
+                                "label": "Max Output Tokens"
+                            },
+                            {
+                                "name": "temperature",
+                                "type": "number",
+                                "label": "Temperature",
+                                "validate": {
+                                    "max": 1,
+                                    "min": 0
+                                }
+                            },
+                            {
+                                "name": "topP",
+                                "type": "number",
+                                "label": "Top P",
+                                "validate": {
+                                    "max": 1,
+                                    "min": 0
+                                }
+                            },
+                            {
+                                "name": "topK",
+                                "type": "number",
+                                "label": "Top K"
+                            },
+                            {
+                                "name": "thinkingConfig",
+                                "spec": [
+                                    {
+                                        "name": "thinkingBudget",
+                                        "type": "number",
+                                        "label": "Thinking Budget"
+                                    },
+                                    {
+                                        "name": "include_thoughts",
+                                        "type": "boolean",
+                                        "label": "Include Thoughts"
+                                    },
+                                    {
+                                        "name": "thinking_level",
+                                        "type": "select",
+                                        "label": "Thinking Level",
+                                        "validate": {
+                                            "enum": [
+                                                "low",
+                                                "high"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Thinking Config"
+                            },
+                            {
+                                "name": "mediaResolution",
+                                "type": "select",
+                                "label": "Media Resolution",
+                                "validate": {
+                                    "enum": [
+                                        "media_resolution_low",
+                                        "media_resolution_medium",
+                                        "media_resolution_high"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "imageConfig",
+                                "spec": [
+                                    {
+                                        "name": "imageSize",
+                                        "type": "select",
+                                        "label": "Image Size",
+                                        "validate": {
+                                            "enum": [
+                                                "1K",
+                                                "2K",
+                                                "4K"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Image Configuration"
+                            },
+                            {
+                                "name": "responseMimeType",
+                                "type": "select",
+                                "label": "Response Format"
+                            },
+                            {
+                                "name": "responseSchema",
+                                "type": "any",
+                                "label": "Response Schema (Deprecated)"
+                            },
+                            {
+                                "name": "new_responseSchema",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "Value Type",
+                                        "options": [
+                                            {
+                                                "label": "String",
+                                                "value": "string",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=string"
+                                            },
+                                            {
+                                                "label": "Enum",
+                                                "value": "enum",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=enum"
+                                            },
+                                            {
+                                                "label": "Number",
+                                                "value": "number",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=number"
+                                            },
+                                            {
+                                                "label": "Integer",
+                                                "value": "integer",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=integer"
+                                            },
+                                            {
+                                                "label": "Boolean",
+                                                "value": "boolean",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=boolean"
+                                            },
+                                            {
+                                                "label": "Object",
+                                                "value": "object",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=object"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Response Schema"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Generation configurations"
+                    },
+                    {
+                        "name": "tools",
+                        "type": "any",
+                        "label": "Tools"
+                    },
+                    {
+                        "name": "tool_config",
+                        "type": "any",
+                        "label": "Tool Config"
+                    },
+                    {
+                        "name": "function_declarations_context",
+                        "type": "boolean",
+                        "label": "Function Declarations Grounding"
+                    },
+                    {
+                        "name": "url_context",
+                        "type": "boolean",
+                        "label": "URL Context"
+                    },
+                    {
+                        "name": "google_search_context",
+                        "type": "boolean",
+                        "label": "Google Search Grounding"
+                    },
+                    {
+                        "name": "code_execution",
+                        "type": "boolean",
+                        "label": "Code Execution"
+                    },
+                    {
+                        "name": "google_maps_context",
+                        "type": "boolean",
+                        "label": "Google Maps Grounding"
+                    },
+                    {
+                        "name": "file_search_store_context",
+                        "type": "boolean",
+                        "label": "File Search Store Context"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 9,
+            "module": "z-api:sendTextMessage",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 7036870
+            },
+            "mapper": {
+                "phone": "{{3.phone}}",
+                "message": "{{4.result.mensagem_resposta}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 662,
+                    "y": -170
+                },
+                "restore": {
+                    "expect": {
+                        "headers": {
+                            "mode": "chose"
+                        },
+                        "privateAnswer": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "z-api"
+                            },
+                            "label": "Minha Conexão Z-API"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:z-api",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "phone",
+                        "type": "text",
+                        "label": "Phone",
+                        "required": true
+                    },
+                    {
+                        "name": "message",
+                        "type": "text",
+                        "label": "Message",
+                        "required": true
+                    },
+                    {
+                        "name": "messageId",
+                        "type": "text",
+                        "label": "Message ID"
+                    },
+                    {
+                        "name": "privateAnswer",
+                        "type": "boolean",
+                        "label": "Private Answer"
+                    },
+                    {
+                        "name": "delayMessage",
+                        "type": "number",
+                        "label": "Delay Message"
+                    },
+                    {
+                        "name": "delayTyping",
+                        "type": "number",
+                        "label": "Delay Typing"
+                    },
+                    {
+                        "name": "editMessageId",
+                        "type": "text",
+                        "label": "Edit Message ID"
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key"
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "module": "datastore:UpdateRecord",
+            "version": 1,
+            "parameters": {
+                "datastore": 70652
+            },
+            "mapper": {
+                "key": "barber-{{3.phone}}",
+                "upsert": true,
+                "overwriteArrays": false,
+                "data": {
+                    "historico_conversa": "{{12.historico_conversa}}\nCliente: {{3.text.message}}\nIA: {{4.result.mensagem_resposta}}"
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 994,
+                    "y": -167
+                },
+                "restore": {
+                    "parameters": {
+                        "datastore": {
+                            "label": "banco de dados "
+                        }
+                    },
+                    "expect": {
+                        "upsert": {
+                            "mode": "chose"
+                        },
+                        "overwriteArrays": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datastore",
+                        "type": "datastore",
+                        "label": "Data store",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "key",
+                        "type": "text",
+                        "label": "Key",
+                        "required": true
+                    },
+                    {
+                        "name": "upsert",
+                        "type": "boolean",
+                        "label": "Insert missing record",
+                        "required": true
+                    },
+                    {
+                        "name": "overwriteArrays",
+                        "type": "boolean",
+                        "label": "Overwrite an existing array in the record",
+                        "required": true
+                    },
+                    {
+                        "name": "data",
+                        "type": "collection",
+                        "label": "Record",
+                        "spec": [
+                            {
+                                "name": "historico_conversa",
+                                "type": "text",
+                                "label": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "google-calendar:createAnEvent",
+            "version": 5,
+            "parameters": {
+                "__IMTCONN__": 6983185
+            },
+            "filter": {
+                "name": "data?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{4.result.confirmacao}}",
+                            "b": "sim",
+                            "o": "text:equal:ci"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "end": "{{4.result.end_date}}",
+                "start": "{{4.result.start_date}}",
+                "select": "detail",
+                "summary": "{{4.result.summary}}",
+                "calendar": "8f092d0dbfbc9172d6ef5019ddc540421d79dd51d0bdca9882ffaf067f705849@group.calendar.google.com",
+                "visibility": "default",
+                "allDayEvent": false,
+                "description": "{{4.result.description}}",
+                "transparency": "opaque",
+                "conferenceDate": false,
+                "guestPermissions": {
+                    "guestsCanModify": false,
+                    "guestsCanInviteOthers": true,
+                    "guestsCanSeeOtherGuests": true
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1435,
+                    "y": -172
+                },
+                "restore": {
+                    "expect": {
+                        "select": {
+                            "label": "In Detail"
+                        },
+                        "colorId": {
+                            "mode": "chose"
+                        },
+                        "calendar": {
+                            "mode": "chose",
+                            "label": "taylon"
+                        },
+                        "attendees": {
+                            "mode": "chose"
+                        },
+                        "overrides": {
+                            "mode": "chose"
+                        },
+                        "recurrence": {
+                            "mode": "chose"
+                        },
+                        "visibility": {
+                            "mode": "chose",
+                            "label": "Default"
+                        },
+                        "allDayEvent": {
+                            "mode": "chose"
+                        },
+                        "attachments": {
+                            "mode": "chose"
+                        },
+                        "sendUpdates": {
+                            "mode": "chose",
+                            "label": "Empty"
+                        },
+                        "transparency": {
+                            "mode": "chose",
+                            "label": "Busy"
+                        },
+                        "conferenceDate": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "Minha Conexão Z-API"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Create an Event",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "quick",
+                                "detail"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "calendar",
+                        "type": "select",
+                        "label": "Calendar ID",
+                        "required": true
+                    },
+                    {
+                        "name": "colorId",
+                        "type": "select",
+                        "label": "Color"
+                    },
+                    {
+                        "name": "summary",
+                        "type": "text",
+                        "label": "Event Name",
+                        "required": true
+                    },
+                    {
+                        "name": "conferenceDate",
+                        "type": "boolean",
+                        "label": "Add Google Meet Video Conferencing",
+                        "required": true
+                    },
+                    {
+                        "name": "attendees",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "displayName",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "email",
+                                    "label": "Email",
+                                    "required": true
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Attendee"
+                        },
+                        "type": "array",
+                        "label": "Attendees"
+                    },
+                    {
+                        "name": "allDayEvent",
+                        "type": "boolean",
+                        "label": "All Day Event",
+                        "required": true
+                    },
+                    {
+                        "name": "start",
+                        "time": true,
+                        "type": "date",
+                        "label": "Start Date",
+                        "required": true
+                    },
+                    {
+                        "name": "end",
+                        "time": true,
+                        "type": "date",
+                        "label": "End Date"
+                    },
+                    {
+                        "name": "duration",
+                        "type": "time",
+                        "label": "Duration"
+                    },
+                    {
+                        "name": "description",
+                        "type": "text",
+                        "label": "Description"
+                    },
+                    {
+                        "name": "location",
+                        "type": "text",
+                        "label": "Location"
+                    },
+                    {
+                        "name": "useDefault",
+                        "type": "boolean",
+                        "label": "Use the default reminder settings for this event"
+                    },
+                    {
+                        "name": "overrides",
+                        "spec": [
+                            {
+                                "name": "method",
+                                "type": "select",
+                                "label": "Method",
+                                "options": [
+                                    {
+                                        "label": "Email",
+                                        "value": "email"
+                                    },
+                                    {
+                                        "label": "Pop-up",
+                                        "value": "popup"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "name": "minutes",
+                                "type": "uinteger",
+                                "label": "Minutes",
+                                "required": true,
+                                "validate": {
+                                    "max": 40320
+                                }
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Reminders",
+                        "validate": {
+                            "maxItems": 5
+                        }
+                    },
+                    {
+                        "name": "transparency",
+                        "type": "select",
+                        "label": "Show me as",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "opaque",
+                                "transparent"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "visibility",
+                        "type": "select",
+                        "label": "Visibility",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "default",
+                                "public",
+                                "private"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "sendUpdates",
+                        "type": "select",
+                        "label": "Send notifications about the event creation",
+                        "validate": {
+                            "enum": [
+                                "all",
+                                "externalOnly",
+                                "none"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "guestPermissions",
+                        "spec": [
+                            {
+                                "name": "guestsCanModify",
+                                "type": "boolean",
+                                "label": "Modify event",
+                                "required": true
+                            },
+                            {
+                                "name": "guestsCanInviteOthers",
+                                "type": "boolean",
+                                "label": "Invite others",
+                                "required": true
+                            },
+                            {
+                                "name": "guestsCanSeeOtherGuests",
+                                "type": "boolean",
+                                "label": "See guest list",
+                                "required": true
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Guest Permissions"
+                    },
+                    {
+                        "name": "recurrence",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Value"
+                        },
+                        "type": "array",
+                        "label": "Recurrence"
+                    },
+                    {
+                        "name": "attachments",
+                        "spec": [
+                            {
+                                "name": "fileUrl",
+                                "type": "url",
+                                "label": "File URL",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Attachments"
+                    }
+                ],
+                "advanced": true
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
